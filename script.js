@@ -16,19 +16,15 @@ function renderPlainText(data) {
     result += `You earned ${data.totalVolumeCredits} credits\n`;
 
     return result;
-
-
-    
-    function usd(aNumber) {
-        return new Intl.NumberFormat(
-            "en-US",
-            { style: "currency", 
-              currency: "USD",
-              minimumFractionDigits: 2 
-            }).format(aNumber);
-    }
-
-
   }
   
+function usd(aNumber) {
+    return new Intl.NumberFormat(
+        "en-US",
+        { style: "currency", 
+          currency: "USD",
+          minimumFractionDigits: 2 
+        }).format(aNumber);
+}
+
 console.log(statement(invoices[0], plays))
