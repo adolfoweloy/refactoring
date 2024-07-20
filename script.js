@@ -5,7 +5,11 @@ function statement(invoice, plays) {
         customer: invoice.customer,
         performances: invoice.performances.map(enrichPerformance),
     };
-    return renderPlainText(statementData, invoice, plays);
+
+    statementData.totalAmount = totalAmount(statementData);
+    statementData.totalVolumeCredits = totalVolumeCredits(statementData);
+
+    return renderPlainText(statementData);
 
     function enrichPerformance(aPerformance) {
         const result = Object.assign({}, aPerformance);
@@ -49,17 +53,33 @@ function statement(invoice, plays) {
         }
         return result;
     }
+
+    function totalVolumeCredits(data) {
+        let result = 0;
+        for (let perf of data.performances) {
+            result += perf.volumeCredits;
+        }
+        return result;
+    }
+
+    function totalAmount(data) {
+        let result = 0;
+        for (let perf of data.performances) {
+            result += perf.amount;
+        }
+        return result;
+    }
 }
 
-function renderPlainText(data, invoice, plays) {
+function renderPlainText(data) {
     let result = `Statement for ${data.customer}\n`;
 
     for (let perf of data.performances) {
       result += `  ${perf.play.name}: ${usd(perf.amount/100)} (${perf.audience} seats)\n`;
     }
 
-    result += `Amount owed is ${usd(totalAmount()/100)}\n`;
-    result += `You earned ${totalVolumeCredits()} credits\n`;
+    result += `Amount owed is ${usd(data.totalAmount/100)}\n`;
+    result += `You earned ${data.totalVolumeCredits} credits\n`;
 
     return result;
 
@@ -74,21 +94,7 @@ function renderPlainText(data, invoice, plays) {
             }).format(aNumber);
     }
 
-    function totalVolumeCredits() {
-        let result = 0;
-        for (let perf of data.performances) {
-            result += perf.volumeCredits;
-        }
-        return result;
-    }
 
-    function totalAmount() {
-        let result = 0;
-        for (let perf of data.performances) {
-            result += perf.amount;
-        }
-        return result;
-    }
   }
   
 console.log(statement(invoices[0], plays))
