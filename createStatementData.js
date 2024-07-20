@@ -36,6 +36,18 @@ class PerformanceCalculator {
     }
 }
 
+class TragedyCalculator extends PerformanceCalculator {}
+
+class ComedyCalculator extends PerformanceCalculator {}
+
+// replace constructor with factory function
+function createPerformanceCalculator(aPerformance, aPlay) {
+    switch (aPlay.type) {
+        case "tragedy": return new TragedyCalculator(aPerformance, aPlay);
+        case "comedy": return new ComedyCalculator(aPerformance, aPlay);
+    }
+}
+
 export default function createStatementData(invoice, plays) {
     const statementData = {}
     statementData.customer = invoice.customer;
@@ -45,7 +57,7 @@ export default function createStatementData(invoice, plays) {
     return statementData;
 
     function enrichPerformance(aPerformance) {
-        const calculator = new PerformanceCalculator(aPerformance, playFor(aPerformance));
+        const calculator = createPerformanceCalculator(aPerformance, playFor(aPerformance));
         const result = Object.assign({}, aPerformance);
         result.play = playFor(result);
         result.amount = calculator.amount;
