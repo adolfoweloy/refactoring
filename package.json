@@ -1,0 +1,15 @@
+{
+  "name": "refactoring.aeloy.com",
+  "version": "1.0.0",
+  "description": "repo used while studying refactoring 2nd edition",
+  "type": "module",
+  "main": "script.js",
+  "scripts": {
+    "test": "node script.js"
+  },
+  "keywords": [
+    "refactoring"
+  ],
+  "author": "aeloy",
+  "license": "ISC"
+}
