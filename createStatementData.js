@@ -9,6 +9,7 @@ class PerformanceCalculator {
     }
 
     get volumeCredits() {
+        return Math.max(this.performance.audience - 30, 0);
     }
 }
 
@@ -19,10 +20,6 @@ class TragedyCalculator extends PerformanceCalculator {
           result += 1000 * (this.performance.audience - 30);
         }
         return result;
-    }
-
-    get volumeCredits() {
-        return Math.max(this.performance.audience - 30, 0);
     }
 }
 
@@ -37,11 +34,8 @@ class ComedyCalculator extends PerformanceCalculator {
     }
 
     get volumeCredits() {
-        let result = Math.max(this.performance.audience - 30, 0);
-        result += Math.floor(this.performance.audience / 5);
-        return result;
+        return super.volumeCredits + Math.floor(this.performance.audience / 5);
     }
-
 }
 
 // replace constructor with factory function
@@ -49,6 +43,8 @@ function createPerformanceCalculator(aPerformance, aPlay) {
     switch (aPlay.type) {
         case "tragedy": return new TragedyCalculator(aPerformance, aPlay);
         case "comedy": return new ComedyCalculator(aPerformance, aPlay);
+        default:
+            throw new Error(`unknown type: ${aPlay.type}`);
     }
 }
 
